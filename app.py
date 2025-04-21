@@ -24,8 +24,14 @@ duration = st.slider("Average Duration (min)", 25, 60, 52)
 if st.button("Predict"):
     scripts_pred = scripts_model.predict([[appt_count, consult_ratio]])
     crowd_pred = crowd_model.predict([[appt_count, consult_ratio, duration]])
+    crowd_prob = crowd_model.predict_proba([[appt_count, consult_ratio, duration]])
+    # Hardcode Appt Count >= 35 rule
+    if appt_count >= 35:
+        crowd_pred[0] = 1
+        crowd_prob[0] = [0.2, 0.8]  # Approximate probability
     st.write(f"**Predicted Scripts**: {int(scripts_pred[0])}")
     st.write(f"**Crowd Level**: {'Crowded' if crowd_pred[0] == 1 else 'Normal'}")
+    st.write(f"**Probability**: Crowded: {crowd_prob[0][1]:.2f}, Normal: {crowd_prob[0][0]:.2f}")
     if crowd_pred[0] == 1:
         st.write("Send greeters to manage waiting room!")
     else:
