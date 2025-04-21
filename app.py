@@ -2,12 +2,12 @@ import streamlit as st
 import pandas as pd
 import pickle
 
-# Load dataset and models (assumes files in repo root)
+# Load dataset and models
 df = pd.read_csv("hospital_appts_full_corrected.csv")
 with open("scripts_model.pkl", "rb") as f:
-scripts_model = pickle.load(f)
+    scripts_model = pickle.load(f)
 with open("crowd_model.pkl", "rb") as f:
-crowd_model = pickle.load(f)
+    crowd_model = pickle.load(f)
 
 # Streamlit app
 st.title("Hospital Demand Predictor")
