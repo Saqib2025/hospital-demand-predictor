@@ -46,7 +46,7 @@ if st.button("Predict"):
     scripts_pred = scripts_model.predict([[appt_count, consult_ratio]])
     scripts_base = int(scripts_pred[0])
     coding_error_rate = 0.05  # Assume 5% of appointments might have coding errors
-    error_buffer = int(scripts_base * 0.1)  # ±10% buffer for coding errors
+    error_buffer = round(scripts_base * 0.1)  # ±10% buffer for coding errors, rounded
     scripts_lower = max(0, scripts_base - error_buffer)
     scripts_upper = scripts_base + error_buffer
     st.write(f"**At {prediction_time.strftime('%I:%M %p')} in {specialty} ({location}):**")
