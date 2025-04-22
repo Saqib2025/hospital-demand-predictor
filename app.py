@@ -32,16 +32,8 @@ prediction_time = st.time_input("Prediction Time", value=st.session_state.predic
 
 # Predict
 if st.button("Predict"):
-    # Log inputs for debugging
-    st.write(f"**Debug Inputs**: Specialty: {specialty}, Location: {location}, Appt Count: {appt_count}, Consult Ratio: {consult_ratio}, Duration: {duration}, Time: {prediction_time.strftime('%I:%M %p')}")
-
-    # Update session state
-    st.session_state.appt_count = appt_count
-    st.session_state.consult_ratio = consult_ratio
-    st.session_state.duration = duration
-    st.session_state.specialty = specialty
-    st.session_state.location = location
-    st.session_state.prediction_time = prediction_time
+    # Log inputs for debugging (round consult_ratio for display)
+    st.write(f"**Debug Inputs**: Specialty: {specialty}, Location: {location}, Appt Count: {appt_count}, Consult Ratio: {round(consult_ratio, 2)}, Duration: {duration}, Time: {prediction_time.strftime('%I:%M %p')}")
 
     # Load dataset and models
     df = pd.read_csv("hospital_appts_full_corrected.csv")
