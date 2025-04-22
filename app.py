@@ -4,31 +4,17 @@ import pickle
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Initialize session state to store inputs
-if 'appt_count' not in st.session_state:
-    st.session_state.appt_count = 20
-if 'consult_ratio' not in st.session_state:
-    st.session_state.consult_ratio = 0.69
-if 'duration' not in st.session_state:
-    st.session_state.duration = 52
-if 'specialty' not in st.session_state:
-    st.session_state.specialty = "Oncology"
-if 'location' not in st.session_state:
-    st.session_state.location = "Main"
-if 'prediction_time' not in st.session_state:
-    st.session_state.prediction_time = pd.to_datetime("09:00").time()
-
 # Streamlit app
 st.title("Hospital Demand Predictor")
 st.write("Predict pharmacy scripts, waiting room status, and resource needs for hospital clinics")
 
 # Input widgets
-specialty = st.selectbox("Clinic Specialty", ["Oncology", "Cardiology", "Neurology", "Orthopedics", "Endocrinology"], key="specialty")
-location = st.selectbox("Clinic Location", ["Main", "City2", "City3"], key="location")
-appt_count = st.number_input("Number of Appointments", min_value=5, max_value=60, value=st.session_state.appt_count, step=1, key="appt_count")
-consult_ratio = st.number_input("Consultation Ratio", min_value=0.3, max_value=0.7, value=st.session_state.consult_ratio, step=0.01, key="consult_ratio", format="%.2f")
-duration = st.number_input("Average Appointment Duration (min)", min_value=25, max_value=60, value=st.session_state.duration, step=1, key="duration")
-prediction_time = st.time_input("Prediction Time", value=st.session_state.prediction_time, step=3600, key="prediction_time")
+specialty = st.selectbox("Clinic Specialty", ["Oncology", "Cardiology", "Neurology", "Orthopedics", "Endocrinology"], key="specialty", value="Oncology")
+location = st.selectbox("Clinic Location", ["Main", "City2", "City3"], key="location", value="Main")
+appt_count = st.number_input("Number of Appointments", min_value=5, max_value=60, value=20, step=1, key="appt_count")
+consult_ratio = st.number_input("Consultation Ratio", min_value=0.3, max_value=0.7, value=0.69, step=0.01, key="consult_ratio", format="%.2f")
+duration = st.number_input("Average Appointment Duration (min)", min_value=25, max_value=60, value=52, step=1, key="duration")
+prediction_time = st.time_input("Prediction Time", value=pd.to_datetime("09:00").time(), step=3600, key="prediction_time")
 
 # Predict
 if st.button("Predict"):
@@ -93,7 +79,7 @@ if st.button("Predict"):
 
     # Scans and Lab Tests
     scan_ratio = {"Oncology": 0.4, "Cardiology": 0.3, "Neurology": 0.3, "Orthopedics": 0.5, "Endocrinology": 0.2}
-    lab_ratio = {"Oncology": 0.6, "Cardiology": 0.5, "Neurology": 0.4, "Orthopedics": 0.3, "Endocrinology": 0.7}
+    lab_ratio = {"Oncology": 0.6, "Cardiology": 0.5, "Neurology": 0.4, "Orthopedics": 0.3, "Endcrinology": 0.7}
     expected_scans = int(appt_count * scan_ratio[specialty])
     expected_labs = int(appt_count * lab_ratio[specialty])
     st.write(f"**Expected Diagnostics**: ~{expected_scans} scans and ~{expected_labs} lab tests.")
