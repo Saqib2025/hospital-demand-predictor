@@ -18,13 +18,6 @@ if 'location' not in st.session_state:
 if 'prediction_time' not in st.session_state:
     st.session_state.prediction_time = pd.to_datetime("09:00").time()
 
-# Load dataset and models
-df = pd.read_csv("hospital_appts_full_corrected.csv")
-with open("scripts_model.pkl", "rb") as f:
-    scripts_model = pickle.load(f)
-with open("crowd_model.pkl", "rb") as f:
-    crowd_model = pickle.load(f)
-
 # Streamlit app
 st.title("Hospital Demand Predictor")
 st.write("Predict pharmacy scripts, waiting room status, and resource needs for hospital clinics")
@@ -32,10 +25,10 @@ st.write("Predict pharmacy scripts, waiting room status, and resource needs for 
 # Input widgets
 specialty = st.selectbox("Clinic Specialty", ["Oncology", "Cardiology", "Neurology", "Orthopedics", "Endocrinology"], key="specialty")
 location = st.selectbox("Clinic Location", ["Main", "City2", "City3"], key="location")
-appt_count = st.number_input("Number of Appointments", min_value=5, max_value=60, value=20, step=1, key="appt_count")
-consult_ratio = st.number_input("Consultation Ratio", min_value=0.3, max_value=0.7, value=0.69, step=0.01, key="consult_ratio", format="%.2f")
-duration = st.number_input("Average Appointment Duration (min)", min_value=25, max_value=60, value=52, step=1, key="duration")
-prediction_time = st.time_input("Prediction Time", value=pd.to_datetime("09:00").time(), step=3600, key="prediction_time")
+appt_count = st.number_input("Number of Appointments", min_value=5, max_value=60, value=st.session_state.appt_count, step=1, key="appt_count")
+consult_ratio = st.number_input("Consultation Ratio", min_value=0.3, max_value=0.7, value=st.session_state.consult_ratio, step=0.01, key="consult_ratio", format="%.2f")
+duration = st.number_input("Average Appointment Duration (min)", min_value=25, max_value=60, value=st.session_state.duration, step=1, key="duration")
+prediction_time = st.time_input("Prediction Time", value=st.session_state.prediction_time, step=3600, key="prediction_time")
 
 # Predict
 if st.button("Predict"):
@@ -49,6 +42,13 @@ if st.button("Predict"):
     st.session_state.specialty = specialty
     st.session_state.location = location
     st.session_state.prediction_time = prediction_time
+
+    # Load dataset and models
+    df = pd.read_csv("hospital_appts_full_corrected.csv")
+    with open("scripts_model.pkl", "rb") as f:
+        scripts_model = pickle.load(f)
+    with open("crowd_model.pkl", "rb") as f:
+        crowd_model = pickle.load(f)
 
     # Pharmacy Scripts Prediction with Coding Error Buffer
     scripts_pred = scripts_model.predict([[appt_count, consult_ratio]])
