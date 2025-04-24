@@ -9,8 +9,8 @@ st.title("Hospital Demand Predictor")
 st.write("Predict pharmacy scripts, waiting room status, and resource needs for hospital clinics")
 
 # Input widgets
-specialty = st.selectbox("Clinic Specialty", ["Oncology", "Cardiology", "Neurology", "Orthopedics", "Endocrinology"], key="specialty", default="Oncology")
-location = st.selectbox("Clinic Location", ["Main", "City2", "City3"], key="location", default="Main")
+specialty = st.selectbox("Clinic Specialty", ["Oncology", "Cardiology", "Neurology", "Orthopedics", "Endocrinology"], key="specialty", value="Oncology")
+location = st.selectbox("Clinic Location", ["Main", "City2", "City3"], key="location", value="Main")
 appt_count = st.number_input("Number of Appointments", min_value=5, max_value=60, value=20, step=1, key="appt_count")
 consult_ratio = st.number_input("Consultation Ratio", min_value=0.3, max_value=0.7, value=0.69, step=0.01, key="consult_ratio", format="%.2f")
 duration = st.number_input("Average Appointment Duration (min)", min_value=25, max_value=60, value=52, step=1, key="duration")
